@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Auth } from 'aws-amplify';
 
 import { useAuthenticationContext } from '../../shared/Authentication';
+import PostsPage from '../PostsPage';
 
 import styles from './Home.module.scss';
 
@@ -33,6 +34,9 @@ const Home = () => {
       ) : (
         'Who are you?'
       )}
+    <div>
+      <PostsPage />
+    </div>
     </main>
   );
 };
