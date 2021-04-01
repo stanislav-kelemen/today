@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Auth } from 'aws-amplify';
 
 import { useAuthenticationContext } from '../../shared/Authentication';
+import PostsPage from '../PostsPage';
 import { onError } from '../../libs/errorLib';
 
 import AdminContainer from '../AdminPanel/AdminContainer';
@@ -46,6 +47,9 @@ const Home = () => {
           {renderAdminPanel()}
         </>
       )}
+    <div>
+      <PostsPage />
+    </div>
     </main>
   );
 };
