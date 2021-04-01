@@ -1,0 +1,44 @@
+.addPostContainer {
+  border: 1px solid rgb(135, 135, 255);
+  width: 90%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border-radius: 7px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  height: 90%;
+  align-items: center;
+  text-align: left;
+}
+
+.form-label {
+  text-align: left;
+  font-size: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgb(135, 135, 255);
+  border-radius: 7px;
+}
+
+.form-textarea {
+  height: 190px;
+  margin-bottom: 30px;
+}
+
+.button {
+  margin: 20px;
+  width: 100%;
+}

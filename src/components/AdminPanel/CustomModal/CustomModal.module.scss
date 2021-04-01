@@ -1,0 +1,19 @@
+.modal-container {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  height: 500px;
+}
+
+.modal-row {
+  display: flex;
+}
+
+.modal-row:first-child {
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.modal-row:last-child {
+  flex: 1;
+}

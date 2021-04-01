@@ -1,0 +1,100 @@
+@import "../../scss/variables.scss";
+
+.pagination {
+  display: flex;
+  margin: 5px 10px;
+
+  &-nav {
+    &-numbers {
+      display: flex;
+      align-items: center;
+    }
+
+    &-number {
+      transition: 0.2s ease background-color;
+      padding: 3px 6px;
+      font-size: 1rem;
+      background-color: transparent;
+      border: 1px solid $black;
+      margin: 0 3px;
+
+      &--active {
+        color: $black;
+        border: 1px solid $black;
+        font-weight: 700;
+      }
+    }
+
+    &-arrow {
+      padding: 3px;
+
+      &:nth-child(1) {
+        margin-right: 3px;
+      }
+
+      &:last-child {
+        margin-left: 3px;
+      }
+
+      &__icon {
+        margin: 0 !important;
+      }
+
+      &--disabled {
+        visibility: hidden;
+      }
+    }
+  }
+
+  .arr-cover {
+    width: 1px;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .arrow {
+    padding: 20px;
+  }
+
+  @keyframes bounce {
+    0% {
+      transform: translateX(0px);
+      timing-function: ease-in;
+    }
+
+    37% {
+      transform: translateX(5px);
+      timing-function: ease-out;
+    }
+
+    55% {
+      transform: translateX(-5px);
+      timing-function: ease-in;
+    }
+
+    73% {
+      transform: translateX(4px);
+      timing-function: ease-out;
+    }
+
+    82% {
+      transform: translateX(-4px);
+      timing-function: ease-in;
+    }
+
+    91% {
+      transform: translateX(2px);
+      timing-function: ease-out;
+    }
+
+    96% {
+      transform: translateX(-2px);
+      timing-function: ease-in;
+    }
+
+    100% {
+      transform: translateX(0px);
+      timing-function: ease-in;
+    }
+  }
+}
