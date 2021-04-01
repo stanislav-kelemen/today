@@ -9,6 +9,7 @@ import Header from './components/Header';
 import Home from './components/Home';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
+import Comments from './components/Comments';
 
 dotenv.config();
 
@@ -38,6 +39,9 @@ function App() {
         </Route>
         <Route exact path={ROUTES.LOGIN}>
           <Login />
+        </Route>
+        <Route exact path={ROUTES.COMMENTS}>
+          <Comments />
         </Route>
         <Route exact path={ROUTES.SIGNUP}>
           <SignUp />
