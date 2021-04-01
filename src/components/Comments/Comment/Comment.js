@@ -60,7 +60,6 @@ const Comment = ( {
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
                 style={customStyles}
-                contentLabel="Example Modal"
                 ariaHideApp={false}
             >
                 <ModalForm closeModal={closeModal} text={text} onUpdate={onUpdate} commentId={commentId}/>
