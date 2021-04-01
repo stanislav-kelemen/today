@@ -1,10 +1,11 @@
 import React from 'react';
 import Modal from 'react-modal';
 import Button from '@material-ui/core/Button';
+import Pagination from '../Pagination';
 
 import PostItem from './PostItem';
 import AddPost from '../AddPost';
-import './PostsPage.css';
+import './PostsPage.scss';
  
 const customStyles = {
   content : {
@@ -21,10 +22,11 @@ const customStyles = {
 
 // const sortQuery = '?sort=date&descending=true';
 const URL = `https://vly41lw5kg.execute-api.us-east-1.amazonaws.com/dev/posts`;
+const numberOfPages = 2;
 
 const PostsPage = () => {
-  let [posts, setPosts] = React.useState([]);
-
+  const [posts, setPosts] = React.useState([]);
+  const [currentPage, setCurrentPage] = React.useState(1);
   const [modalIsOpen,setIsOpen] = React.useState(false);
 
   function openModal() {
@@ -37,12 +39,13 @@ const PostsPage = () => {
   
   React.useEffect(() => {
       const fetchPosts = async (url) => {
-          const response = await fetch(url);
+          const response = await fetch(`${url}?limit=${2}&page=${currentPage}`);
           const responseJSON = await response.json();
+
           setPosts(responseJSON);
       };
       fetchPosts(URL);
-  }, []);
+  }, [currentPage]);
 
   const onDelete = (postId) => { 
     const updatePosts = posts.filter(post => post.postId !== postId);
@@ -58,8 +61,14 @@ const PostsPage = () => {
       />
   );
 
-  const onPostAdd = (post) => {
-    setPosts([...posts, post])
+  const onPostAdd = () => {
+    const fetchPosts = async (url) => {
+      const response = await fetch(`${url}?limit=${2}&page=${currentPage}`);
+      const responseJSON = await response.json();
+
+        setPosts(responseJSON);
+    };
+    fetchPosts(URL);
   }
 
   return (
@@ -68,6 +77,11 @@ const PostsPage = () => {
           <div>
             
             <Button className="addPostButton" onClick={openModal} color="primary" variant="contained">Add Post</Button>
+            <Pagination 
+              currentPage={currentPage}
+              numberOfPages={numberOfPages}
+              setCurrentPage={setCurrentPage}
+            />
             <Modal
               isOpen={modalIsOpen}
               onRequestClose={closeModal}

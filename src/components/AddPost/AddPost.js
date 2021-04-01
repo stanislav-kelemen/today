@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 
-import './AddPost.css';
+import './AddPost.scss';
 // import fetchPosts from './fetchPost';
 
 const AddPost = ({ onPostAdd, closeModal, ...posts }) => {

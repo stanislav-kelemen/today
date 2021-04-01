@@ -2,8 +2,21 @@ import React from 'react';
 import propTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
+import { makeStyles } from '@material-ui/core/styles';
 
-import './PostItem.css'
+import './PostItem.scss'
+
+const useStyles = makeStyles(() => ({
+  post: {
+    backgroundColor: '#f8f9fa',
+    width: '100%',
+    height: '95%',
+    border: '1px solid rgb(135, 135, 255)',
+    borderRadius: '20px',
+    background: '#f8f9fa'
+  }
+}));
+
 
 const PostItem = (props) => {
   const {
@@ -14,7 +27,7 @@ const PostItem = (props) => {
     createdAt,
     onDelete
   } = props;
-
+  const classes = useStyles();
   const handleDelete = () => {
     const deletePost = async (postId) => {
       const response = await fetch(`https://vly41lw5kg.execute-api.us-east-1.amazonaws.com/dev/posts/${postId}`, {
@@ -27,6 +40,7 @@ const PostItem = (props) => {
       }
       deletePost(postId);
   }
+  
 
   const getDataFormat = () => {
     const postDate = new Date(createdAt);
@@ -40,7 +54,7 @@ const PostItem = (props) => {
   return (
     <Card className="card">
       <div className="singlePostContainer">
-        <Card className="singlePost">
+        <Card className={classes.post}>
           <p className="post-title">{title}</p>
           <p className="post-text">{text}</p>
           <div className="post-header">
