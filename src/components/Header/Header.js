@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
 
 import ROUTES from '../../constants/routePaths';
+import { onError } from '../../libs/errorLib';
 import { useAuthenticationContext } from '../../shared/Authentication';
 
 import styles from './Header.module.scss';
@@ -19,7 +20,9 @@ const Header = () => {
 
           setEmail(userInfo.attributes.email);
         }
-      } catch (e) {}
+      } catch (e) {
+        onError(e);
+      }
     }
 
     fetch();
