@@ -3,6 +3,7 @@ import { Auth } from 'aws-amplify';
 import AWS from 'aws-sdk';
 
 import { useAuthenticationContext } from '../../shared/Authentication';
+import PostsPage from '../PostsPage';
 import { onError } from '../../libs/errorLib';
 
 import styles from './Home.module.scss';
@@ -69,6 +70,9 @@ const Home = () => {
       ) : (
         'Who are you?'
       )}
+    <div>
+      <PostsPage />
+    </div>
     </main>
   );
 };
