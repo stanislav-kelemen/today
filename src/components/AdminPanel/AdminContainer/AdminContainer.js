@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import CustomModal from '../CustomModal';
 import UserList from '../UserList';
+import Button from '@material-ui/core/Button';
 
-import styles from './AdminContainer.modules.scss';
+import './AdminContainer.css';
 
 const URL = `${process.env.REACT_APP_JSON_SERVER}`;
 
@@ -46,7 +47,7 @@ const AdminContainer = () => {
     }
   };
   return (
-    <div className={styles['container']}>
+    <div className="container">
       <Modal
         ariaHideApp={false}
         isOpen={modalIsOpen}
@@ -57,7 +58,9 @@ const AdminContainer = () => {
         <CustomModal removeModal={closeModal} onUserAdd={onAdd}/>
       </Modal>
       <UserList users={users} onUserDelete={onDelete}/>
-      <button className={styles['add-btn']} onClick={openModal}>Add User</button>
+      <Button variant="contained" color="primary" onClick={openModal}>
+        Add User
+      </Button>
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
-import styles from './UserForm.module.scss';
+import './UserForm.css';
 
 const URL = `${process.env.REACT_APP_JSON_SERVER}`;
 
@@ -37,41 +39,59 @@ const UserForm = ({ removeModal, onUserAdd }) => {
   }
 
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
-      <div className={styles['form-row']} >
-        <label className={styles['form-label']}>User Name</label>
-        <input
-          className={styles['form-input']}
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+    <form className="form" onSubmit={onSubmit}>
+      <div className="form-row">
+      <TextField
+          id="outlined-full-width"
+          label="User Name"
+          style={{ margin: 8 }}
           placeholder="Alex"
+          type="text"
+          margin="normal"
+          value={name}
           required
+          onChange={(e) => setName(e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
         />
       </div>
-      <div className={styles['form-row']}>
-        <label className={styles['form-label']}>User E-mail</label>
-        <input
-          className={styles['form-input']}
-          type="email" 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="alex@gmail.com"
-          required
-        />
+      <div className="form-row">
+        <TextField
+            id="outlined-full-width"
+            label="User Email"
+            style={{ margin: 8 }}
+            placeholder="alex@gmail.com"
+            type="email" 
+            margin="normal"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="outlined"
+          />
       </div>
-      <div className={styles['form-row']}>
-        <label className={styles['form-label']}>User Password</label>
-        <input
-          className={styles['form-input']}
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+      <div className="form-row">
+        <TextField
+            id="outlined-full-width"
+            label="User Email"
+            style={{ margin: 8 }}
+            margin="normal"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="outlined"
+          />
       </div>
-      <div className={styles['form-row']}>
-        <button className={styles['submit-btn']} type="submit">Create User</button>
+      <div className="form-row">
+        <Button variant="contained" color="primary" type="submit">Create User</Button>
       </div>
     </form>
   );
