@@ -10,7 +10,7 @@ export function useAuthenticationContext() {
 }
 
 export default function AuthenticationProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
