@@ -1,0 +1,77 @@
+@import "../../scss/variables";
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+  font-size: 2rem;
+}
+
+.heading {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 2.2rem;
+  font-family: $font-secondary;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.label {
+  display: none;
+}
+
+.field {
+  margin-bottom: 0.8rem;
+  box-sizing: border-box;
+  width: 130%;
+  padding: 0.5rem;
+  font-size: 15px;
+  font-family: $font-primary;
+  border: 1px solid $gainsboro;
+  outline: none;
+  color: $black;
+
+  &:focus {
+    border: 1px solid $black;
+    outline: none;
+  }
+
+  &::placeholder {
+    color: $light-grey;
+  }
+}
+
+.submitBtn {
+  margin-top: 10px;
+  font-size: 2rem;
+}
+
+.notRegistered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.signUpLink {
+  margin-top: 5px;
+  font-size: 1.8rem;
+  color: $blue;
+  font-family: $font-primary;
+
+  &:hover {
+    color: lighten($blue, 20%);
+  }
+}

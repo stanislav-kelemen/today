@@ -1,0 +1,38 @@
+@import "../../scss/variables.scss";
+
+.spinning {
+  margin-right: 7px;
+  top: 2px;
+  animation: spin 1s infinite linear;
+}
+
+.blackButton {
+  width: 100%;
+  margin: 0;
+  height: 30px;
+  padding: 0 5px;
+  background-color: $black;
+  border: none;
+  color: $white;
+  font-size: 20px;
+  text-transform: uppercase;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    background-color: $dark-grey;
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}
