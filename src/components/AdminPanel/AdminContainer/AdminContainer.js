@@ -30,8 +30,6 @@ const getUsers = async () => {
   });
 }
 
-
-
 const AdminContainer = ({ className }) => {
   const [users, setUsers] = useState([]);
   const [modalIsOpen,setIsOpen] = useState(false);

@@ -11,7 +11,6 @@ import styles from './Home.module.scss';
 
 const Home = () => {
   const [isAdmin, setIsAdmin] = useState(false);
-  const [name, setName] = useState('');
   const { isAuthenticated } = useAuthenticationContext();
 
   useEffect(() => {
@@ -19,37 +18,28 @@ const Home = () => {
       if (isAuthenticated) {
         try {
           const session = await Auth.currentSession();
-          const idTokenPayload = session.getIdToken().payload;
-          const accessTokenPayload = session.getAccessToken().payload;
+          const accessTokenPayload = session.getAccessToken()?.payload;
     
           setIsAdmin(accessTokenPayload['cognito:groups']?.includes('admin'));
-          setName(`${idTokenPayload.given_name} ${idTokenPayload.family_name}`);
         } catch (e) {
           onError(e);
         }
       }
+
+      setIsAdmin(false);
     };
 
     fetch();
   }, [isAuthenticated]);
-
-  const renderAdminPanel = () => {
-    return isAdmin && (
-      <AdminContainer className={styles.adminPanel}/>
-    );
-  };
   
   return (
     <main className={styles.main}>
       {isAuthenticated && (
         <>
-          <div className={styles.hello}>{!isAdmin && `Hello, ${name}!`}</div>
-          {renderAdminPanel()}
+          {isAdmin && <AdminContainer className={styles.adminPanel} />}
         </>
       )}
-    <div>
-      <PostsPage />
-    </div>
+      {!isAdmin && <PostsPage />}
     </main>
   );
 };
