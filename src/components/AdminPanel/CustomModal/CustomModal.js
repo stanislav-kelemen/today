@@ -1,15 +1,18 @@
 import React from 'react';
 import UserForm from '../UserForm';
+import Button from '@material-ui/core/Button';
 
-import styles from './CustomModal.module.scss';
+import './CustomModal.css';
 
 const CustomModal = ({ removeModal, onUserAdd }) => {
   return (
-    <div className={styles['modal-container']}>
-      <div className={styles['modal-row']}>
-        <button className={styles['close-btn']} onClick={removeModal}>X</button>
+    <div className="modal-container">
+      <div className="modal-row">
+      <Button variant="contained" color="secondary" onClick={removeModal} className="close-btn">
+        X
+      </Button>
       </div>
-      <div className={styles['modal-row']}>
+      <div className="modal-row">
         <UserForm removeModal={removeModal} onUserAdd={onUserAdd}/>
       </div>
     </div>

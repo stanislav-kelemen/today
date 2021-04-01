@@ -1,6 +1,9 @@
 import React from 'react';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
 
-import styles from './UserItem.module.scss';
+import './UserItem.css';
 
 const URL = `${process.env.REACT_APP_JSON_SERVER}`;
 
@@ -20,20 +23,20 @@ const UserItem = ({ name, email, id, onUserDelete }) => {
   };
 
   return (
-    <tr className={styles['user-item']}>
-      <td className={styles['user-item']}>{name}</td>
-      <td className={styles['user-item']}>{email}</td>
-      <td className={styles['user-item']}>{id}</td>
-      <td className={styles['user-item']}>
-        <button
-          className={styles['delete-button']}
+    <TableRow>
+      <TableCell>{name}</TableCell>
+      <TableCell>{email}</TableCell>
+      <TableCell>{id}</TableCell>
+      <TableCell>
+        <Button
+          variant="contained"
           type="button"
           onClick={() => deleteUser(id)}
         >
           Delete User
-        </button>
-      </td>
-    </tr>
+        </Button>
+      </TableCell>
+    </TableRow>
   )
 }
 
