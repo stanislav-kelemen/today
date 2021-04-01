@@ -9,18 +9,11 @@
   display: flex;
 }
 
-.modal-row:last-child {
-  flex: 1;
+.modal-row:first-child {
+  justify-content: flex-end;
+  margin-bottom: 20px;
 }
 
-.close-btn {
-  padding: 3px 6px;
-  font-weight: bold;
-  border-radius: 2px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  color: var(--white);
-  background-color: var(--danger);
-  margin-left: auto;
+.modal-row:last-child {
+  flex: 1;
 }
