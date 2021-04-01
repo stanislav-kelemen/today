@@ -3,9 +3,73 @@ import Modal from 'react-modal';
 import CustomModal from '../CustomModal';
 import UserList from '../UserList';
 
-import styles from './AdminContainer.modules.scss';
+import AWS from 'aws-sdk';
 
-const URL = `${process.env.REACT_APP_JSON_SERVER}`;
+import styles from './AdminContainer.module.scss';
+
+const getUsers = () => {
+  const params = {
+    UserPoolId: process.env.REACT_APP_USER_POOL_ID,
+    AttributesToGet: [
+      'given_name',
+      'family_name',
+      'sub',
+      'email'
+    ],
+  };
+
+  return new Promise((resolve, reject) => {
+    AWS.config.update({
+      region: process.env.REACT_APP_AWS_REGION,
+      accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID,
+      secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY
+    });
+
+    var cognitoProvider = new AWS.CognitoIdentityServiceProvider();
+
+    cognitoProvider.listUsers(params, (err, data) => {
+      if (err) {
+        reject(err);
+      }
+      else {
+        const usersList = data.Users.map((user) => {
+          const attributes = user.Attributes;
+          const userObj  = {};
+          const namesObj = {};
+
+          attributes.forEach((attribute) => {
+            const name = attribute.Name;
+            const value = attribute.Value;
+
+            switch (name) {
+              case 'given_name':
+                namesObj.firstName = value;
+                break;
+              case 'family_name':
+                namesObj.lastName = value;
+                break;
+              case 'email':
+                userObj.email = value;
+                break;
+              case 'sub':
+                userObj.id = value;
+                break;
+              default:
+                break;
+            }
+          });
+          
+          userObj.name = `${namesObj.firstName} ${namesObj.lastName}`;
+
+          return userObj;
+        });
+
+        console.log(usersList);
+        resolve(usersList);
+      }
+    })
+  });
+}
 
 const AdminContainer = () => {
   const [users, setUsers] = useState([]);
@@ -15,14 +79,11 @@ const AdminContainer = () => {
   const closeModal = () => setIsOpen(false);
   
   useEffect(() => {
-    const fetchUsers = async (url) => {
-      const response = await fetch(url);
-      const responseJSON = await response.json();
-  
-      setUsers(responseJSON);
+    const fetchUsers = async () => {
+      setUsers(await getUsers());
     };
 
-    fetchUsers(`${URL}/users`);
+    fetchUsers();
   }, []);
 
   const onDelete = (id) => {
