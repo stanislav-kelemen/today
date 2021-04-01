@@ -1,6 +1,14 @@
-.mainText {
+.main {
   display: flex;
   justify-content: center;
+  font-size: 2.0rem;
+}
+
+.adminPanel {
+  margin-top: 3rem;
+}
+
+.hello {
+  font-size: 1.2rem;
   margin-top: 15rem;
-  font-size: 3rem;
 }

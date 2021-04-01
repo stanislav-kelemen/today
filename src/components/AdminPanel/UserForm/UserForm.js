@@ -1,97 +1,152 @@
 import React, { useState } from 'react';
+import AWS from 'aws-sdk';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import LoaderButton from '../../../shared/LoaderButton';
 
-import './UserForm.css';
+import attributesToUser from '../../../helpers/attributesToUser';
+import { useFormFields } from '../../../libs/hooksLib';
+import { onError } from '../../../libs/errorLib';
 
-const URL = `${process.env.REACT_APP_JSON_SERVER}`;
+import styles from './UserForm.module.scss';
 
 const UserForm = ({ removeModal, onUserAdd }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const postUser = async (userObject) => {
-    const response = await fetch(`${URL}/users`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(userObject)
-    });
-    const responseJSON = await response.json();
-
-    return responseJSON;
-  }
+  const [isLoading, setIsLoading] = useState(false);
+  const [fields, handleFieldChange] = useFormFields({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  });
 
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    const newUser = {
-      name,
-      email,
-      password
-    }
-    const responseUser = await postUser(newUser);
+    const cognitoProvider = new AWS.CognitoIdentityServiceProvider();
 
-    onUserAdd(responseUser);
+    try {
+      setIsLoading(true);
+
+      const params = {
+        MessageAction: 'SUPPRESS',
+        Username: fields.email,
+        UserAttributes: [
+          {
+            Name: 'given_name',
+            Value: fields.firstName
+          },
+          {
+            Name: 'family_name',
+            Value: fields.lastName
+          },
+          {
+            Name: 'email',
+            Value: fields.email
+          },
+        ],
+        UserPoolId: process.env.REACT_APP_USER_POOL_ID,
+      };
+
+      const user = (await cognitoProvider.adminCreateUser(params).promise()).User;
+
+      await cognitoProvider.adminSetUserPassword({
+        Password: fields.password,
+        Permanent: true,
+        Username: fields.email,
+        UserPoolId: process.env.REACT_APP_USER_POOL_ID,
+      }).promise();
+
+      onUserAdd(attributesToUser(user.Attributes));
+      setIsLoading(false);
+    } catch (e) {
+      await cognitoProvider.adminDeleteUser({
+        Username: fields.email,
+        UserPoolId: process.env.REACT_APP_USER_POOL_ID,
+      }).promise();
+
+      onError(e);
+    }
+
     removeModal();
   }
 
   return (
-    <form className="form" onSubmit={onSubmit}>
-      <div className="form-row">
-      <TextField
-          id="outlined-full-width"
-          label="User Name"
+    <form className={styles.form} onSubmit={onSubmit}>
+      <div className={styles['form-row']}>
+        <TextField
+          id="firstName"
+          label="User First Name"
           style={{ margin: 8 }}
-          placeholder="Alex"
+          placeholder="First Name"
           type="text"
           margin="normal"
-          value={name}
+          value={fields.firstName}
           required
-          onChange={(e) => setName(e.target.value)}
+          onChange={handleFieldChange}
           InputLabelProps={{
             shrink: true,
           }}
           variant="outlined"
         />
       </div>
-      <div className="form-row">
+      <div className={styles['form-row']}>
         <TextField
-            id="outlined-full-width"
-            label="User Email"
-            style={{ margin: 8 }}
-            placeholder="alex@gmail.com"
-            type="email" 
-            margin="normal"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            InputLabelProps={{
-              shrink: true,
-            }}
-            variant="outlined"
-          />
+          id="lastName"
+          label="User Last Name"
+          style={{ margin: 8 }}
+          placeholder="Last Name"
+          type="text"
+          margin="normal"
+          value={fields.lastName}
+          required
+          onChange={handleFieldChange}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
       </div>
-      <div className="form-row">
+      <div className={styles['form-row']}>
         <TextField
-            id="outlined-full-width"
-            label="User Email"
-            style={{ margin: 8 }}
-            margin="normal"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            InputLabelProps={{
-              shrink: true,
-            }}
-            variant="outlined"
-          />
+          id="email"
+          label="User Email"
+          style={{ margin: 8 }}
+          placeholder="Email"
+          type="email"
+          margin="normal"
+          value={fields.email}
+          onChange={handleFieldChange}
+          required
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
       </div>
-      <div className="form-row">
-        <Button variant="contained" color="primary" type="submit">Create User</Button>
+      <div className={styles['form-row']}>
+        <TextField
+          id="password"
+          label="User Password"
+          style={{ margin: 8 }}
+          placeholder="Password"
+          margin="normal"
+          type="text"
+          value={fields.password}
+          onChange={handleFieldChange}
+          required
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+      </div>
+      <div className={styles['form-row']}>
+        <LoaderButton
+          className={styles.submitBtn}
+          isLoading={isLoading}
+          type="submit"
+        >
+          Create User
+        </LoaderButton>
       </div>
     </form>
   );

@@ -19,6 +19,7 @@
 
   &:hover {
     cursor: pointer;
+    background-color: lighten($black, 10%);
   }
 
   &:disabled {

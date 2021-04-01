@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import CustomModal from '../CustomModal';
-import UserList from '../UserList';
+import AWS from 'aws-sdk';
 import Button from '@material-ui/core/Button';
 
-import AWS from 'aws-sdk';
+import UserList from '../UserList';
+import CustomModal from '../CustomModal';
+
+import attributesToUser from '../../../helpers/attributesToUser';
 
 import styles from './AdminContainer.module.scss';
 
-const getUsers = () => {
+const getUsers = async () => {
   const params = {
     UserPoolId: process.env.REACT_APP_USER_POOL_ID,
     AttributesToGet: [
@@ -19,60 +21,18 @@ const getUsers = () => {
     ],
   };
 
-  return new Promise((resolve, reject) => {
-    AWS.config.update({
-      region: process.env.REACT_APP_AWS_REGION,
-      accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID,
-      secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY
-    });
+  const cognitoProvider = new AWS.CognitoIdentityServiceProvider();
 
-    var cognitoProvider = new AWS.CognitoIdentityServiceProvider();
+  const data = await cognitoProvider.listUsers(params).promise();
 
-    cognitoProvider.listUsers(params, (err, data) => {
-      if (err) {
-        reject(err);
-      }
-      else {
-        const usersList = data.Users.map((user) => {
-          const attributes = user.Attributes;
-          const userObj  = {};
-          const namesObj = {};
-
-          attributes.forEach((attribute) => {
-            const name = attribute.Name;
-            const value = attribute.Value;
-
-            switch (name) {
-              case 'given_name':
-                namesObj.firstName = value;
-                break;
-              case 'family_name':
-                namesObj.lastName = value;
-                break;
-              case 'email':
-                userObj.email = value;
-                break;
-              case 'sub':
-                userObj.id = value;
-                break;
-              default:
-                break;
-            }
-          });
-          
-          userObj.name = `${namesObj.firstName} ${namesObj.lastName}`;
-
-          return userObj;
-        });
-
-        console.log(usersList);
-        resolve(usersList);
-      }
-    })
+  return data.Users.map((user) => {
+    return attributesToUser(user.Attributes);
   });
 }
 
-const AdminContainer = () => {
+
+
+const AdminContainer = ({ className }) => {
   const [users, setUsers] = useState([]);
   const [modalIsOpen,setIsOpen] = useState(false);
 
@@ -87,11 +47,17 @@ const AdminContainer = () => {
     fetchUsers();
   }, []);
 
-  const onDelete = (id) => {
-    const updatedUsers = users.filter(user => user.id !== id);
+  const deleteUser = async (userId) => {
+    const cognito = new AWS.CognitoIdentityServiceProvider();
+    const params = {
+      UserPoolId: process.env.REACT_APP_USER_POOL_ID,
+      Username: userId,
+    };
+    const newUserList = users.filter(user => user.id !== userId);
 
-    setUsers(updatedUsers);
-  };
+    await cognito.adminDeleteUser(params).promise();
+    setUsers(newUserList);
+  }
 
   const onAdd = (userObject) => {
     setUsers([...users, userObject]);
@@ -108,7 +74,7 @@ const AdminContainer = () => {
     }
   };
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${className}`}>
       <Modal
         ariaHideApp={false}
         isOpen={modalIsOpen}
@@ -118,7 +84,7 @@ const AdminContainer = () => {
       >
         <CustomModal removeModal={closeModal} onUserAdd={onAdd}/>
       </Modal>
-      <UserList users={users} onUserDelete={onDelete}/>
+      <UserList users={users} onUserDelete={deleteUser}/>
       <Button variant="contained" color="primary" onClick={openModal}>
         Add User
       </Button>

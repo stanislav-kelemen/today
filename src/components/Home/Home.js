@@ -34,19 +34,17 @@ const Home = () => {
 
   const renderAdminPanel = () => {
     return isAdmin && (
-      <AdminContainer/>
+      <AdminContainer className={styles.adminPanel}/>
     );
   };
   
   return (
-    <main className={styles.mainText}>
-      {isAuthenticated ? (
+    <main className={styles.main}>
+      {isAuthenticated && (
         <>
-          {`Hello, ${name}!`}
+          <div className={styles.hello}>{!isAdmin && `Hello, ${name}!`}</div>
           {renderAdminPanel()}
         </>
-      ) : (
-        'Who are you?'
       )}
     </main>
   );

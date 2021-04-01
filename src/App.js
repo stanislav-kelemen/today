@@ -1,6 +1,7 @@
 import { Route, Switch } from 'react-router-dom';
 import dotenv from 'dotenv';
 import { Amplify } from 'aws-amplify';
+import AWS from 'aws-sdk';
 
 import ROUTES from './constants/routePaths';
 
@@ -19,6 +20,12 @@ Amplify.configure({
     identityPoolId: process.env.REACT_APP_IDENTITY_POOL_ID,
     userPoolWebClientId: process.env.REACT_APP_APP_CLIENT_ID
   }
+});
+
+AWS.config.update({
+  region: process.env.REACT_APP_AWS_REGION,
+  accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID,
+  secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY
 });
 
 function App() {

@@ -8,8 +8,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-import './UserList.css';
-
 const UserList = ({ users, onUserDelete }) => {
   return (
     <TableContainer component={Paper}>

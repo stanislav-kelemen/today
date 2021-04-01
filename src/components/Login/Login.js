@@ -54,7 +54,7 @@ const Login = () => {
           id="email"
           type="email"
           placeholder="Email"
-          value={fields.E}
+          value={fields.email}
           onChange={handleFieldChange}
         />
         <label className={styles.label} htmlFor="password">
