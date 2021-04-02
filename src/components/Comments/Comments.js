@@ -11,7 +11,7 @@ const Comments = () => {
     let [comments, setComments] = useState([]);
     const [currentPage, setCurrentPage] = React.useState(1);
     const [numberOfPages, setNumberOfPages] = React.useState(0);
-    const itemsOnPage = 2;
+    const itemsOnPage = 3;
    
     useEffect(() => {
         const fetchComments = async (url) => {
