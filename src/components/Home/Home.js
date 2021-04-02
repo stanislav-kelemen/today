@@ -24,9 +24,9 @@ const Home = () => {
         } catch (e) {
           onError(e);
         }
+      } else {
+        setIsAdmin(false);
       }
-
-      setIsAdmin(false);
     };
 
     fetch();
