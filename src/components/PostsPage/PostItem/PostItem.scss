@@ -3,8 +3,7 @@
 .card {
   margin-bottom: 25px;
   width: 800px;
-  height: 400px;
-  margin: 50px;
+  margin: 50px auto;
 }
 
 .wrapper {
@@ -32,6 +31,11 @@
   font-size: 23px;
   color: $white;
   font-family: $font-primary;
+
+  a {
+    color: currentColor;
+    text-decoration: none;
+  }
 }
 
 .post-header {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
+import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -71,7 +72,9 @@ const PostItem = (props) => {
   return (
         <Card className={`${classes.post} card`}>
           <div className="wrapper">
-              <p className="post-title">{title}</p>
+              <p className="post-title">
+                <Link to={`/post/${postId}`}>{title}</Link>
+              </p>
               {isAuthenticated && isDeleteAllowed &&
               <div className="item-buttons">
                 <LoaderButton
