@@ -64,7 +64,7 @@ const PostsPage = () => {
       {...post}
     />
   );
-
+    console.log(numberOfPages);
   const onPostAdd = () => {
     const fetchPosts = async (url) => {
       const response = await fetch(`${url}?limit=${2}&page=${currentPage}`);

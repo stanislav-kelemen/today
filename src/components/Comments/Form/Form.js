@@ -10,8 +10,8 @@ const URL = 'https://tjbwnyrrrd.execute-api.us-east-1.amazonaws.com/dev/comments
 
 const useStyles = makeStyles(() => ({
     button: {
-      fontSize: '1.3rem',
-      width: '100%'
+      fontSize: '1rem',
+      width: '50%'
     }
   }));
 
@@ -21,7 +21,6 @@ const useStyles = makeStyles(() => ({
 const Form = ({ userId, postId,  onAdd }) => {
     const [text, setText] = useState('');
     const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
     const classes = useStyles();
 
     const postComment = async (post) => {
@@ -42,10 +41,6 @@ const Form = ({ userId, postId,  onAdd }) => {
     setName(e.target.value);
    }
 
-   const handleEmail = (e) => {
-    setEmail(e.target.value);
-   }
-
    const handleText = (e) => {
     setText(e.target.value);
    }
@@ -57,8 +52,7 @@ const Form = ({ userId, postId,  onAdd }) => {
            userId,
            postId,
            text,
-           name,
-           email
+           name
        }
     postComment(post)
    }
@@ -67,11 +61,10 @@ const Form = ({ userId, postId,  onAdd }) => {
         <form className={style.form} onSubmit={addComment}>
             <h2 className={style.title}>Add a comment</h2>
             <div  className={style.inputs}>
-                <textarea className={style.comment} onChange={handleText} placeholder="Enter your comment, please" />
                 <div className={style.wrapper}>
-                    <Input title="User Name" type="name" handleChange={handleName}/>
-                    <Input title="Email" type="email" handleChange={handleEmail}/>
+                    <Input handleChange={handleName}/>
                 </div>
+                <textarea className={style.comment} onChange={handleText} placeholder="Enter your comment" />
             </div>
             <Button color="primary" variant="contained" className={classes.button} type="submit">Add Comment</Button>
         </form>
