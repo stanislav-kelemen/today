@@ -1,4 +1,4 @@
-export default function pagesBadges({ currentPage, pages, numBadges = 5 }) {
+export default function pagesBadges({ currentPage, pages, numBadges = 4 }) {
   const maxBadgesSide = numBadges - 2;
 
   // Without separators case
