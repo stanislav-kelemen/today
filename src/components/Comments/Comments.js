@@ -18,7 +18,6 @@ const Comments = () => {
             const response = await fetch(`${url}?limit=${itemsOnPage}&page=${currentPage}`);
             const responseJSON = await response.json();
 
-            console.log(numberOfPages)
             setNumberOfPages(responseJSON.commentsNum / responseJSON.comments.length);
             setComments(responseJSON.comments);
         };
@@ -43,7 +42,7 @@ const Comments = () => {
     const renderCommentItem = (comment) => (
         <Comment key={comment.commentId} {...comment} onUpdate={onCommentUpdate} onDelete={onCommentDelete} commentId={comment.commentId} />
     );
-    console.log(numberOfPages);
+
     return comments.length && (
     <div className={style.container}>
         { comments.map(renderCommentItem)}

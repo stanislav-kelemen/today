@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import Card from '@material-ui/core/Card';
@@ -16,7 +16,6 @@ const useStyles = makeStyles(() => ({
     backgroundColor: '#f8f9fa',
     width: '100%',
     height: '95%',
-    // border: '1px solid rgb(199, 199, 199)',
     borderRadius: '10px',
     background: '#f8f9fa'
   }
@@ -32,10 +31,22 @@ const PostItem = (props) => {
     onDelete,
     author
   } = props;
-  console.log(`userId`, userId)
+
   const classes = useStyles();
   const [userSub, setUserSub] = useState('');
   const { isAuthenticated } = useAuthenticationContext();
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const userInfo = await Auth.currentAuthenticatedUser();
+
+        setUserSub(userInfo.attributes.sub);
+      } catch(e) {}
+    }
+
+    getUserInfo();
+  }, []);
 
   const handleDelete = () => {
     const deletePost = async (postId) => {
@@ -46,10 +57,6 @@ const PostItem = (props) => {
 
       await response.json();
       onDelete(postId);
-
-      const userInfo = await Auth.currentAuthenticatedUser();
-
-      setUserSub(userInfo.attributes.sub);
     }
     deletePost(postId);
   }
@@ -84,7 +91,7 @@ const PostItem = (props) => {
               variant="contained"
               color="secondary"
             >
-              Delete post
+              Delete my post
             </LoaderButton>
           </div>
         }

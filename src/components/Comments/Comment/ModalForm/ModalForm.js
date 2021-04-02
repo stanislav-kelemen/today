@@ -22,7 +22,7 @@ const ModalForm = ({ closeModal, text, onUpdate, commentId }) => {
         });
 
         const responseJSON = await response.json();
-        console.log(responseJSON);
+
         onUpdate({commentId, text: responseJSON.Attributes.text});
     }
 
