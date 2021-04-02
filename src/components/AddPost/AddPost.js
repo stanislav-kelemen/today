@@ -2,7 +2,6 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 import './AddPost.scss';
-// import fetchPosts from './fetchPost';
 
 const AddPost = ({ onPostAdd, closeModal, ...posts }) => {
   const [title, setTitle] = React.useState('');
@@ -37,7 +36,6 @@ const AddPost = ({ onPostAdd, closeModal, ...posts }) => {
     closeModal();
   }
 
-  // fetchPosts(addPost);
 
   const handleTitleState = (e) => {
     e.preventDefault();
