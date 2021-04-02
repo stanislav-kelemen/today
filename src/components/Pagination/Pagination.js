@@ -11,6 +11,8 @@ const Pagination = (props) => {
     currentPage, numberOfPages, setCurrentPage,
   } = props;
 
+  
+
   const setPage = (e) => {
     setCurrentPage(+e.target.innerText);
   };

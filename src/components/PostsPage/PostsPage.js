@@ -22,12 +22,15 @@ const customStyles = {
   }
 };
 
-const numberOfPages = 2;
+// const sortQuery = '?sort=date&descending=true';
+const URL = `https://vly41lw5kg.execute-api.us-east-1.amazonaws.com/dev/posts`;
 
 const PostsPage = () => {
   const [posts, setPosts] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [numberOfPages, setNumberOfPages] = React.useState(0);
+  const itemsOnPage = 2;
 
   function openModal() {
     setIsOpen(true);
@@ -38,14 +41,14 @@ const PostsPage = () => {
   }
 
   React.useEffect(() => {
-    const fetchPosts = async (url) => {
-      const response = await fetch(`${url}?limit=${2}&page=${currentPage}`);
-      const responseJSON = await response.json();
+      const fetchPosts = async (url) => {
+          const response = await fetch(`${url}?limit=${itemsOnPage}&page=${currentPage}`);
+          const responseJSON = await response.json();
 
-      setPosts(responseJSON);
-    };
-
-    fetchPosts(POSTS_URL);
+          setNumberOfPages(responseJSON.length / itemsOnPage)
+          setPosts(responseJSON);
+      };
+      fetchPosts(URL);
   }, [currentPage]);
 
   const onDelete = (postId) => {
