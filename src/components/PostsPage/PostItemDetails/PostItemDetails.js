@@ -3,9 +3,14 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import LoaderButton from '../../../shared/LoaderButton';
+import Comment from '../../Comments/Comment/Comment';
+import Button from '@material-ui/core/Button';
+import Modal from 'react-modal';
+import Form from '../../Comments/Form/Form';
 import { makeStyles } from '@material-ui/core/styles';
 import { POST_URL } from '../../../constants/endpoints';
 import { POSTS_URL } from '../../../constants/endpoints';
+import { COMMENT_URL } from '../../../constants/endpoints';
 
 import '../PostItem/PostItem.scss';
 
@@ -16,20 +21,72 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
+ 
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    width                 : '300px',
+    height                : '300px'
+  }
+};
+
 const PostItemDetails = () => {
   const { postId } = useParams();
   const { goBack } = useHistory();
   const classes = useStyles();
   const [postDetails, setPostDetails] = useState({});
-  
+  const [comments, setComments] = useState([]);
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
+  const onCommentDelete = (commentId) => {
+    const updatedComments = comments.filter(
+      (comment) => comment.commentId !== commentId
+    );
+
+    setComments(updatedComments);
+  };
+
+  const onCommentAdd = (comment) => {
+    setComments([...comments, comment]);
+  };
+
+  const onCommentUpdate = (updatedComment) => {
+    const updatedComments = comments.filter(
+      (comment) => comment.commentId !== updatedComment.commentId
+    );
+    setComments([...updatedComments, updatedComment]);
+  };
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal(e){
+      
+    setIsOpen(false);
+  }
+
   useEffect(() => {
-    const fetchPost = async (id) => {
+    const fetchPost = async (postId) => {
       const response = await fetch(`${POST_URL}/${postId}`);
       const responseJSON = await response.json();
-      console.log(responseJSON)
+
       setPostDetails(responseJSON);
     };
 
+    const fetchComments = async (postId) => {
+      const response = await fetch(`${COMMENT_URL}/post/${postId}`);
+      const responseJSON = await response.json();
+
+      setComments(responseJSON.comments);
+    }
+
+    fetchComments(postId)
     fetchPost(postId);
   }, [postId]);
 
@@ -58,6 +115,14 @@ const PostItemDetails = () => {
 
   return Object.values(postDetails).length && (
     <Card className={`${classes.post} card`}>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        ariaHideApp={false}
+      >
+        <Form userId={postDetails.userId} postId={postId} closeModal={closeModal} onAdd={onCommentAdd} />
+      </Modal>
       <div className="wrapper">
           <p className="post-title">
             <Link to={`/post/${postId}`}>{postDetails.title}</Link>
@@ -74,8 +139,18 @@ const PostItemDetails = () => {
           </div>
       </div>
       <p className="post-text">{postDetails.text}</p>
+      <div className="comments">
+        {comments.map(comment => <Comment commentId={comment.commentId} text={comment.text} userName={comment.userName} createdAt={comment.createdAt} onDelete={onCommentDelete} onUpdate={onCommentUpdate} />)}
+      </div>
       <div className="post-header">
         <div className="user-id">Author: {postDetails.author}</div>
+        <Button
+            onClick={openModal}
+            color="primary"
+            variant="contained"
+          >
+            Write a comment
+          </Button>
         <div className="post-date">Date: {getDataFormat()}</div>
       </div>
     </Card>

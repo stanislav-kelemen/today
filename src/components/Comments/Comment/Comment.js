@@ -24,9 +24,10 @@ const Comment = ( {
     id, 
     commentId,
     text,
-    time,
     onDelete,
-    onUpdate
+    onUpdate,
+    userName,
+    createdAt
      }) => {
 
         const [modalIsOpen,setIsOpen] = React.useState(false);
@@ -54,6 +55,18 @@ const Comment = ( {
         deleteComment(commentId);
     }
 
+    const getDataFormat = () => {
+        const postDate = new Date(createdAt);
+        const postDay = postDate.getDay();
+        const postMonth = postDate.getMonth();
+        const postYear = postDate.getFullYear();
+    
+        return (`${postDay}.${postMonth}.${postYear}`)
+      }
+
+      console.log(`getDataFormat`, getDataFormat);
+      console.log(`userName`, userName)
+
     return (        
         <div className={style.comment}>
             <Modal
@@ -71,8 +84,8 @@ const Comment = ( {
             <div className={style.container}>
                 <img className={style.avatarImg} src="../../../assets/avatar.png" alt={id} ></img>
                 <div className={style.wrapper}>
-                    <h2 className={style.name}>{id}</h2>
-                    <h5 className={style.date}>{time}</h5>
+                    <h2 className={style.name}>{userName}</h2>
+                    <h5 className={style.date}>{getDataFormat()}</h5>
                     <p className={style.text}>{text}</p>
                 </div>
             </div>
