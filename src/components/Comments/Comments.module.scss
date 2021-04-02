@@ -1,7 +1,13 @@
-.container{
-    margin: 2rem 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+.container {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.paginationContainer {
+  padding: 20px 5px 15px;
+  display: flex;
+  justify-content: center;
 }
