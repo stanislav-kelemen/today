@@ -1,27 +1,26 @@
-import React from 'react';
-import Modal from 'react-modal';
-import Button from '@material-ui/core/Button';
-// import Pagination from '../Pagination';
+import React from "react";
+import Modal from "react-modal";
+import Button from "@material-ui/core/Button";
+import Pagination from "@material-ui/lab/Pagination";
 
-import { useAuthenticationContext } from '../../shared/Authentication';
+import { POSTS_URL } from "../../constants/endpoints";
+import { useAuthenticationContext } from "../../shared/Authentication";
 
-import { POSTS_URL } from '../../constants/endpoints';
-
-import PostItem from './PostItem';
-import AddPost from '../AddPost';
-import './PostsPage.scss';
+import PostItem from "./PostItem";
+import AddPost from "../AddPost";
+import "./PostsPage.scss";
 
 const customStyles = {
   content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    width: '500px',
-    height: '500px'
-  }
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    width: "500px",
+    height: "500px",
+  },
 };
 
 const PostsPage = () => {
@@ -42,46 +41,69 @@ const PostsPage = () => {
 
   React.useEffect(() => {
     const fetchPosts = async (url) => {
-      const response = await fetch(`${url}?limit=${itemsOnPage}&page=${currentPage}`);
+      const response = await fetch(
+        `${url}?limit=${itemsOnPage}&page=${currentPage}`
+      );
       const responseJSON = await response.json();
 
-      setNumberOfPages(responseJSON.length / itemsOnPage)
+      setNumberOfPages(Math.ceil(responseJSON.postsNum / itemsOnPage));
       setPosts(responseJSON.posts);
     };
-
     fetchPosts(POSTS_URL);
   }, [currentPage]);
 
   const onDelete = (postId) => {
-    const updatePosts = posts.filter(post => post.postId !== postId);
+    const updatePosts = posts.filter((post) => post.postId !== postId);
 
     setPosts(updatePosts);
-  }
+  };
 
   const renderDropdownItem = (post) => (
-    <PostItem
-      key={post.postId}
-      onDelete={onDelete}
-      {...post}
-    />
+    <PostItem key={post.postId} onDelete={onDelete} {...post} />
   );
-
   const onPostAdd = () => {
     const fetchPosts = async (url) => {
-      const response = await fetch(`${url}?limit=${itemsOnPage}&page=${currentPage}`);
+      const response = await fetch(
+        `${url}?limit=${itemsOnPage}&page=${currentPage}`
+      );
       const responseJSON = await response.json();
 
       setPosts(responseJSON.posts);
     };
 
     fetchPosts(POSTS_URL);
-  }
+  };
+
+  const handleChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
   return (
     <div className="container">
       {posts.map(renderDropdownItem)}
       <div>
-        {isAuthenticated && <Button className="addPostButton" onClick={openModal} color="primary" variant="contained">Add Post</Button>}
+        {isAuthenticated && (
+          <Button
+            className="addPostButton"
+            onClick={openModal}
+            color="primary"
+            variant="contained"
+          >
+            Add Post
+          </Button>
+        )}
+
+        <div className="paginationContainer">
+          <Pagination
+            count={numberOfPages}
+            page={currentPage}
+            onChange={handleChange}
+            siblingCount={0}
+            boundaryCount={1}
+            color="primary"
+          />
+        </div>
+
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
@@ -90,13 +112,20 @@ const PostsPage = () => {
           ariaHideApp={false}
         >
           <div className="modalHeader">
-            <Button onClick={closeModal} variant="contained" color="secondary">close</Button>
+            <Button onClick={closeModal} variant="contained" color="secondary">
+              close
+            </Button>
           </div>
-          <AddPost posts={posts} onPostAdd={onPostAdd} closeModal={closeModal} />
+
+          <AddPost
+            posts={posts}
+            onPostAdd={onPostAdd}
+            closeModal={closeModal}
+          />
         </Modal>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default PostsPage;
