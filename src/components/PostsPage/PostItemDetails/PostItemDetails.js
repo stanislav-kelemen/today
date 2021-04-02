@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
+import LoaderButton from '../../../shared/LoaderButton';
 import { makeStyles } from '@material-ui/core/styles';
 import { POST_URL } from '../../../constants/endpoints';
 import { POSTS_URL } from '../../../constants/endpoints';
+
+import '../PostItem/PostItem.scss';
 
 const useStyles = makeStyles(() => ({
   post: {
@@ -54,21 +57,26 @@ const PostItemDetails = () => {
   }
 
   return Object.values(postDetails).length && (
-    <Card className="card">
-      <div className="singlePostContainer">
-        <Card className={classes.post}>
+    <Card className={`${classes.post} card`}>
+      <div className="wrapper">
           <p className="post-title">
-            {postDetails.title}
+            <Link to={`/post/${postId}`}>{postDetails.title}</Link>
           </p>
-          <p className="post-text">{postDetails.text}</p>
-          <div className="post-header">
-            <div className="user-id">Author: {postDetails.author}</div>
-            <div className="post-date">Date: {getDataFormat()}</div>
-          </div>
-        </Card>
           <div className="item-buttons">
-            <Button className="deletePostButton" variant="contained" onClick={handleDelete} color="secondary">Delete my post</Button>
+            <LoaderButton
+              className="deletePostButton"
+              onClick={handleDelete}
+              variant="contained"
+              color="secondary"
+            >
+              Delete my post
+            </LoaderButton>
           </div>
+      </div>
+      <p className="post-text">{postDetails.text}</p>
+      <div className="post-header">
+        <div className="user-id">Author: {postDetails.author}</div>
+        <div className="post-date">Date: {getDataFormat()}</div>
       </div>
     </Card>
   );
