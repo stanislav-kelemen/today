@@ -15,9 +15,6 @@ const useStyles = makeStyles(() => ({
     }
   }));
 
-
-  
-
 const Form = ({ userId, postId,  onAdd }) => {
     const [text, setText] = useState('');
     const [name, setName] = useState('');

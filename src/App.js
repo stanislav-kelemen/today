@@ -11,6 +11,7 @@ import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Comments from './components/Comments';
 import PostDetails from './components/PostsPage/PostItemDetails';
+import MyPosts from './components/MyPosts';
 
 dotenv.config();
 
@@ -29,13 +30,7 @@ AWS.config.update({
   accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID,
   secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY
 });
-const post = {
-  userId: '12',
-  title: 'fsdfds',
-  text: 'fdsf',
-  time: 'fdsfds',
-  postId: 'fsfdf'
-}
+
 function App() {
   return (
     <>
@@ -55,6 +50,9 @@ function App() {
         </Route>
         <Route exact path="/post/:postId">
           <PostDetails />
+        </Route>
+        <Route exact path={ROUTES.MY_POSTS}>
+          <MyPosts />
         </Route>
       </Switch>
     </>

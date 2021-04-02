@@ -42,6 +42,9 @@ const Header = () => {
       <div className={styles.links}>
         {isAuthenticated ? (
           <>
+            <Link className={styles.link} to={ROUTES.MY_POSTS}>
+              <span>My Posts</span>
+            </Link>
             <div className={styles.email}>{email}</div>
             <Link className={styles.link} to={ROUTES.HOME} onClick={handleLogout}>
               <span>Log Out</span>

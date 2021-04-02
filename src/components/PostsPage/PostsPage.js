@@ -58,8 +58,12 @@ const PostsPage = () => {
     setPosts(updatePosts);
   };
 
-  const renderDropdownItem = (post) => (
-    <PostItem key={post.postId} onDelete={onDelete} {...post} />
+  const renderPostItem = (post) => (
+    <PostItem
+      key={post.postId}
+      onDelete={onDelete}
+      {...post}
+    />
   );
   const onPostAdd = () => {
     const fetchPosts = async (url) => {
@@ -80,7 +84,7 @@ const PostsPage = () => {
 
   return (
     <div className="container">
-      {posts.map(renderDropdownItem)}
+      {posts.map(renderPostItem)}
       <div>
         {isAuthenticated && (
           <Button
