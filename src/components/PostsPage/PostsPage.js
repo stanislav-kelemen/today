@@ -2,7 +2,6 @@ import React from 'react';
 import Modal from 'react-modal';
 import Button from '@material-ui/core/Button';
 // import Pagination from '../Pagination';
-import Pagination from '@material-ui/lab/Pagination';
 
 import { useAuthenticationContext } from '../../shared/Authentication';
 
@@ -83,9 +82,6 @@ const PostsPage = () => {
       {posts.map(renderDropdownItem)}
       <div>
         {isAuthenticated && <Button className="addPostButton" onClick={openModal} color="primary" variant="contained">Add Post</Button>}
-        <Pagination
-          count={5}
-        />
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
