@@ -141,6 +141,8 @@ const UserForm = ({ removeModal, onUserAdd }) => {
       </div>
       <div className={styles['form-row']}>
         <LoaderButton
+          variant="contained"
+          color="primary"
           className={styles.submitBtn}
           isLoading={isLoading}
           type="submit"

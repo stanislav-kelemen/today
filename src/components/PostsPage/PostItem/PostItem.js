@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
+import { Auth } from 'aws-amplify';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { POSTS_URL } from '../../../constants/endpoints';
+import { useAuthenticationContext } from '../../../shared/Authentication';
+
+import LoaderButton from '../../../shared/LoaderButton';
 
 import './PostItem.scss'
 
@@ -11,12 +16,10 @@ const useStyles = makeStyles(() => ({
     backgroundColor: '#f8f9fa',
     width: '100%',
     height: '95%',
-    // border: '1px solid rgb(199, 199, 199)',
     borderRadius: '10px',
     background: '#f8f9fa'
   }
 }));
-
 
 const PostItem = (props) => {
   const {
@@ -28,19 +31,34 @@ const PostItem = (props) => {
     onDelete,
     author
   } = props;
-  console.log(`userId`, userId)
+
   const classes = useStyles();
+  const [userSub, setUserSub] = useState('');
+  const { isAuthenticated } = useAuthenticationContext();
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const userInfo = await Auth.currentAuthenticatedUser();
+
+        setUserSub(userInfo.attributes.sub);
+      } catch(e) {}
+    }
+
+    getUserInfo();
+  }, []);
+
   const handleDelete = () => {
     const deletePost = async (postId) => {
-      const response = await fetch(`https://vly41lw5kg.execute-api.us-east-1.amazonaws.com/dev/posts/${postId}`, {
-          method: 'DELETE',
-          body: JSON.stringify({userId})
-        });
+      const response = await fetch(`${POSTS_URL}/${postId}`, {
+        method: 'DELETE',
+        body: JSON.stringify({ userId })
+      });
 
-        await response.json();
-        onDelete(postId)
-      }
-      deletePost(postId);
+      await response.json();
+      onDelete(postId);
+    }
+    deletePost(postId);
   }
   
   const getDataFormat = () => {
@@ -51,6 +69,8 @@ const PostItem = (props) => {
 
     return (`${postDay}.${postMonth}.${postYear}`)
   }
+
+  const isDeleteAllowed = userId === userSub;
 
   return (
     <Card className="card">
@@ -63,9 +83,18 @@ const PostItem = (props) => {
             <div className="post-date">Date: {getDataFormat()}</div>
           </div>
         </Card>
+        {isAuthenticated && isDeleteAllowed &&
           <div className="item-buttons">
-            <Button className="deletePostButton" onClick={handleDelete} variant="contained" color="secondary">Delete my post</Button>
+            <LoaderButton
+              className="deletePostButton"
+              onClick={handleDelete}
+              variant="contained"
+              color="secondary"
+            >
+              Delete my post
+            </LoaderButton>
           </div>
+        }
       </div>
     </Card>
   );

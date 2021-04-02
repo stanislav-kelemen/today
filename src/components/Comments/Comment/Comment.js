@@ -3,6 +3,8 @@ import Button from '@material-ui/core/Button';
 import Modal from 'react-modal';
 import ModalForm from './ModalForm';
 
+import { COMMENTS_URL } from '../../../constants/endpoints';
+
 import style from './Comment.module.scss';
  
 const customStyles = {
@@ -17,8 +19,6 @@ const customStyles = {
     height                : '500px'
   }
 };
-
-const URL = 'https://tjbwnyrrrd.execute-api.us-east-1.amazonaws.com/dev/comments';
 
 const Comment = ( {
     id, 
@@ -42,7 +42,7 @@ const Comment = ( {
          const handleDelete = () => {
             const deleteComment = async (commentId) => {
 
-            const response = await fetch (`${URL}/${commentId}`,{
+            const response = await fetch (`${COMMENTS_URL}/${commentId}`,{
                 method: "DELETE"
             });
 

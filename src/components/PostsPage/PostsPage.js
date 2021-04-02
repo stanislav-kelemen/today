@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import Pagination from "@material-ui/lab/Pagination";
 
 import { POSTS_URL } from "../../constants/endpoints";
+import { useAuthenticationContext } from "../../shared/Authentication";
 
 import PostItem from "./PostItem";
 import AddPost from "../AddPost";
@@ -22,15 +23,13 @@ const customStyles = {
   },
 };
 
-// const sortQuery = '?sort=date&descending=true';
-const URL = `https://vly41lw5kg.execute-api.us-east-1.amazonaws.com/dev/posts`;
-
 const PostsPage = () => {
   const [posts, setPosts] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [numberOfPages, setNumberOfPages] = React.useState(0);
-  const itemsOnPage = 2;
+  const itemsOnPage = 4;
+  const { isAuthenticated } = useAuthenticationContext();
 
   function openModal() {
     setIsOpen(true);
@@ -50,7 +49,7 @@ const PostsPage = () => {
       setNumberOfPages(Math.ceil(responseJSON.postsNum / itemsOnPage));
       setPosts(responseJSON.posts);
     };
-    fetchPosts(URL);
+    fetchPosts(POSTS_URL);
   }, [currentPage]);
 
   const onDelete = (postId) => {
@@ -62,10 +61,11 @@ const PostsPage = () => {
   const renderDropdownItem = (post) => (
     <PostItem key={post.postId} onDelete={onDelete} {...post} />
   );
-  console.log(numberOfPages);
   const onPostAdd = () => {
     const fetchPosts = async (url) => {
-      const response = await fetch(`${url}?limit=${2}&page=${currentPage}`);
+      const response = await fetch(
+        `${url}?limit=${itemsOnPage}&page=${currentPage}`
+      );
       const responseJSON = await response.json();
 
       setPosts(responseJSON.posts);
@@ -82,14 +82,16 @@ const PostsPage = () => {
     <div className="container">
       {posts.map(renderDropdownItem)}
       <div>
-        <Button
-          className="addPostButton"
-          onClick={openModal}
-          color="primary"
-          variant="contained"
-        >
-          Add Post
-        </Button>
+        {isAuthenticated && (
+          <Button
+            className="addPostButton"
+            onClick={openModal}
+            color="primary"
+            variant="contained"
+          >
+            Add Post
+          </Button>
+        )}
 
         <div className="paginationContainer">
           <Pagination

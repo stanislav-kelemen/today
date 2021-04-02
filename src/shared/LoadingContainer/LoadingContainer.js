@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Preloader from '../Preloader/Preloader';
-import PreviewPreloader from '../Preloader/PreviewPreloader';
+import Preloader from './Preloader/Preloader';
+import PreviewPreloader from './Preloader/PreviewPreloader';
 
 const LoadingContainer = ({
   isLoading,

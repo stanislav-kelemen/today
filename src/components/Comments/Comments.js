@@ -5,7 +5,7 @@ import Form from './Form/Form';
 
 import style from './Comments.module.scss';
 
-const URL = 'https://tjbwnyrrrd.execute-api.us-east-1.amazonaws.com/dev/comments';
+import { COMMENTS_URL } from '../../constants/endpoints';
 
 const Comments = () => {
     let [comments, setComments] = useState([]);
@@ -18,11 +18,10 @@ const Comments = () => {
             const response = await fetch(`${url}?limit=${itemsOnPage}&page=${currentPage}`);
             const responseJSON = await response.json();
 
-            console.log(numberOfPages)
             setNumberOfPages(responseJSON.commentsNum / responseJSON.comments.length);
             setComments(responseJSON.comments);
         };
-        fetchComments(URL);
+        fetchComments(COMMENTS_URL);
     }, [itemsOnPage, currentPage, numberOfPages]);
 
     const onCommentDelete = (commentId) => {
@@ -41,9 +40,9 @@ const Comments = () => {
     }
 
     const renderCommentItem = (comment) => (
-        <Comment key={comment.commentId} {...comment} onUpdate={onCommentUpdate} onDelete={onCommentDelete} commentId={comment.commentId}/>
+        <Comment key={comment.commentId} {...comment} onUpdate={onCommentUpdate} onDelete={onCommentDelete} commentId={comment.commentId} />
     );
-    console.log(numberOfPages);
+
     return comments.length && (
     <div className={style.container}>
         { comments.map(renderCommentItem)}
