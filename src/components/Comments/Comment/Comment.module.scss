@@ -1,4 +1,4 @@
-.comment{
+.comment {
     display: flex;
     flex-direction: column;
     border: 1px solid grey;
@@ -9,23 +9,24 @@
     background-color: #f8f9fa;
 }
 
-.delete{
+.delete {
+    cursor: pointer;
     align-self: flex-end;
     width: 50px;
     top: 2rem;
     right: 2rem;
-    &:hover{
-        cursor: pointer;
+
+    &:hover {
         filter: brightness(80%);
     }
 }
 
-.update{
+.update {
     top: 2rem;
     right: 4rem;
 }
 
-.buttons{
+.buttons {
     display: flex;
     justify-content: flex-end;
 }
@@ -36,15 +37,15 @@
     align-items: center;
 }
 
-.avatarImg{
+.avatarImg {
     width: 100px;
     height: 100px;
     border-radius: 100px;
     object-fit: cover;
-    margin-right: 20px ;
+    margin-right: 20px;
 }
 
-.text{
+.text {
     margin: 10px 0;
     font-size: 3rem;
 }

@@ -70,6 +70,8 @@ const Login = () => {
         />
         <LoaderButton
           className={styles.submitBtn}
+          variant="contained"
+          color="secondary"
           type="submit"
           isLoading={isLoading}
           disabled={!validateForm()}

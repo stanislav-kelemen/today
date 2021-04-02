@@ -174,6 +174,8 @@ const SignUp = () => {
         />
         <LoaderButton
           type="submit"
+          variant="contained"
+          color="secondary"
           className={style.submitBtn}
           isLoading={isLoading}
           disabled={!validateForm()}

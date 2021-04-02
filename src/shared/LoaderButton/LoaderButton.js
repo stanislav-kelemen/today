@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '@material-ui/core/Button';
 import { BsArrowRepeat } from 'react-icons/bs';
 
 import style from './LoaderButton.module.scss';
@@ -6,17 +7,23 @@ import style from './LoaderButton.module.scss';
 const LoaderButton = ({
   isLoading,
   className,
+  variant,
+  color,
   disabled,
   children,
+  ...props
 }) => (
-  <button
+  <Button
+    variant={variant}
+    color={color}
     disabled={disabled || isLoading}
-    className={`${style.LoaderButton} ${style.blackButton} ${className}`}
+    className={`${style.blackButton} ${className}`}
     type="submit"
+    {...props}
   >
     {isLoading && <BsArrowRepeat className={style.spinning} />}
     {children}
-  </button>
+  </Button>
 );
 
 export default LoaderButton;
