@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import Button from '@material-ui/core/Button';
+import { COMMENTS_URL } from '../../../../constants/endpoints'
 
 import style from './ModalForm.module.scss';
-
-const URL = 'https://tjbwnyrrrd.execute-api.us-east-1.amazonaws.com/dev/comments';
 
 const ModalForm = ({ closeModal, text, onUpdate, commentId }) => {
     const [newText, setnewText] = useState(text);
@@ -13,7 +12,7 @@ const ModalForm = ({ closeModal, text, onUpdate, commentId }) => {
     }
 
     const updateComment = async (post) => {
-        const response = await fetch(`${URL}/${commentId}`, {
+        const response = await fetch(`${COMMENTS_URL}/${commentId}`, {
             method: "PATCH",
             headers: {
                 'content-type': 'application/json'

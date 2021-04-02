@@ -1,0 +1,8 @@
+@import "../../../scss/variables.scss";
+
+.wrapper {
+  &:hover {
+    cursor: default;
+    background-color: $violet;
+  }
+}

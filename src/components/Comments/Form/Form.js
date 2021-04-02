@@ -1,37 +1,25 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
 
 import Input from './Input/Input';
+import { COMMENTS_URL } from '../../../constants/endpoints'
 
 import style from './Form.module.scss';
 
-const URL = 'https://tjbwnyrrrd.execute-api.us-east-1.amazonaws.com/dev/comments';
-
-const useStyles = makeStyles(() => ({
-    button: {
-      fontSize: '1rem',
-      width: '50%'
-    }
-  }));
-
-const Form = ({ userId, postId,  onAdd }) => {
+const Form = ({ userId, postId, closeModal, onAdd }) => {
     const [text, setText] = useState('');
     const [name, setName] = useState('');
-    const classes = useStyles();
 
     const postComment = async (post) => {
-        const response = await fetch(URL, {
+        await fetch(COMMENTS_URL, {
             method: "POST",
             headers: {
                 'content-type': 'application/json'
             },
             body: JSON.stringify(post)
         });
-
-        const responseJSON = await response.json();
-
-        onAdd(responseJSON);
+        
+        closeModal();
     }
 
    const handleName = (e) => {    
@@ -49,9 +37,10 @@ const Form = ({ userId, postId,  onAdd }) => {
            userId,
            postId,
            text,
-           name
+           userName: name
        }
-    postComment(post)
+       onAdd(post);
+        postComment(post)
    }
 
     return (
@@ -63,7 +52,7 @@ const Form = ({ userId, postId,  onAdd }) => {
                 </div>
                 <textarea className={style.comment} onChange={handleText} placeholder="Enter your comment" />
             </div>
-            <Button color="primary" variant="contained" className={classes.button} type="submit">Add Comment</Button>
+            <Button color="primary" variant="contained" className={style.addBtn }type="submit">Add Comment</Button>
         </form>
     )
 }

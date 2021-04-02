@@ -34,7 +34,6 @@ const PostItem = (props) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const { isAuthenticated } = useAuthenticationContext();
 
-
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -43,7 +42,9 @@ const PostItem = (props) => {
 
         setIsAdmin(accessTokenPayload['cognito:groups']?.includes('admin'));
         setUserSub(userInfo.attributes.sub);
-      } catch(e) {}
+      } catch(e) {
+
+      }
     }
 
     getUserInfo();
@@ -59,6 +60,7 @@ const PostItem = (props) => {
       await response.json();
       onDelete(postId);
     }
+    
     deletePost(postId);
   }
   
@@ -74,29 +76,27 @@ const PostItem = (props) => {
   const isDeleteAllowed = userId === userSub;
 
   return (
-        <Card className={`${classes.post} card`}>
-          <div className="wrapper">
-              <p className="post-title">
-                <Link to={`/post/${postId}`}>{title}</Link>
-              </p>
-              {isAuthenticated && (isDeleteAllowed || isAdmin) &&
-              <div className="item-buttons">
-                <LoaderButton
-                  className="deletePostButton"
-                  onClick={handleDelete}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Delete my post
-                </LoaderButton>
-              </div>}
-          </div>
-          <p className="post-text">{text}</p>
-          <div className="post-header">
-            <div className="user-id">Author: {author}</div>
-            <div className="post-date">Date: {getDataFormat()}</div>
-          </div>
-        </Card>
+      <Card className={`${classes.post} card`}>
+        <div className="wrapper">
+            <Link className="post-title" to={`/post/${postId}`}>{title}</Link>
+            {isAuthenticated && (isDeleteAllowed || isAdmin) &&
+            <div className="item-buttons">
+              <LoaderButton
+                className="deletePostButton"
+                onClick={handleDelete}
+                variant="contained"
+                color="secondary"
+              >
+                Delete my post
+              </LoaderButton>
+            </div>}
+        </div>
+        <p className="post-text">{text}</p>
+        <div className="post-header">
+          <div className="user-id">Author: {author}</div>
+          <div className="post-date">Date: {getDataFormat()}</div>
+        </div>
+      </Card>
   );
 };
 
