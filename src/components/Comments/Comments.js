@@ -9,7 +9,7 @@ import { COMMENTS_URL } from "../../constants/endpoints";
 import style from "./Comments.module.scss";
 
 const Comments = () => {
-  let [comments, setComments] = useState([]);
+  const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [numberOfPages, setNumberOfPages] = React.useState(0);
   const itemsOnPage = 3;
@@ -49,6 +49,8 @@ const Comments = () => {
   const renderCommentItem = (comment) => (
     <Comment
       key={comment.commentId}
+      userName={comment.userName}
+      createdAt={comment.createdAt}
       {...comment}
       onUpdate={onCommentUpdate}
       onDelete={onCommentDelete}
