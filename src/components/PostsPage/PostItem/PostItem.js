@@ -13,11 +13,7 @@ import './PostItem.scss'
 
 const useStyles = makeStyles(() => ({
   post: {
-    backgroundColor: '#f8f9fa',
-    width: '100%',
-    height: '95%',
-    borderRadius: '10px',
-    background: '#f8f9fa'
+    borderRadius: '10px'
   }
 }));
 
@@ -73,30 +69,28 @@ const PostItem = (props) => {
   const isDeleteAllowed = userId === userSub;
 
   return (
-    <Card className="card">
-      <div className="singlePostContainer">
-        <Card className={classes.post}>
-          <p className="post-title">{title}</p>
+        <Card className={`${classes.post} card`}>
+          <div className="wrapper">
+              <p className="post-title">{title}</p>
+              {isAuthenticated && isDeleteAllowed &&
+              <div className="item-buttons">
+                <LoaderButton
+                  className="deletePostButton"
+                  onClick={handleDelete}
+                  variant="contained"
+                  color="secondary"
+                >
+                  Delete my post
+                </LoaderButton>
+              </div>
+              }
+          </div>
           <p className="post-text">{text}</p>
           <div className="post-header">
             <div className="user-id">Author: {author}</div>
             <div className="post-date">Date: {getDataFormat()}</div>
           </div>
         </Card>
-        {isAuthenticated && isDeleteAllowed &&
-          <div className="item-buttons">
-            <LoaderButton
-              className="deletePostButton"
-              onClick={handleDelete}
-              variant="contained"
-              color="secondary"
-            >
-              Delete my post
-            </LoaderButton>
-          </div>
-        }
-      </div>
-    </Card>
   );
 };
 
