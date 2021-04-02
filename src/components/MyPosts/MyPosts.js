@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import Pagination from "@material-ui/lab/Pagination";
 
 import { Auth } from 'aws-amplify';
 
@@ -11,18 +11,7 @@ import { useAuthenticationContext } from '../../shared/Authentication';
 import PostItem from '../PostsPage/PostItem';
 import './MyPosts.scss';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    width: '500px',
-    height: '500px'
-  }
-};
+import LoadingContainer from '../../shared/LoadingContainer';
 
 const MyPosts = () => {
   const history = useHistory();
@@ -35,26 +24,25 @@ const MyPosts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [userId, setUserId] = useState();
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const itemsOnPage = 4;
 
   useEffect(() => {
     const fetchPosts = async (url) => {
+      setIsLoading(true);
+
       const userInfo = await Auth.currentAuthenticatedUser();
 
       setUserId(userInfo.attributes.sub);
 
-      const response = await fetch(`${url}/?limit=${itemsOnPage}&page=${currentPage}`, {
-        method: 'GET',
-        body: JSON.stringify({
-          userId: userId,
-        }),
-      });
-      
+      const response = await fetch(`${url}/user/${userId}?limit=${itemsOnPage}&page=${currentPage}`);
+
       const responseJSON = await response.json();
 
-      setNumberOfPages(responseJSON.length / itemsOnPage)
+      setNumberOfPages(Math.floor(responseJSON.postsNum / itemsOnPage))
       setPosts(responseJSON.posts);
+      setIsLoading(false);
     };
 
     fetchPosts(POSTS_URL);
@@ -75,9 +63,24 @@ const MyPosts = () => {
   );
 
   return (
-    <div className="container">
-      {posts.map(renderPostItem)}
-    </div>
+    <>
+      <LoadingContainer isLoading={isLoading}>
+        <div className="container">
+          {posts.map(renderPostItem)}
+        </div>
+
+      </LoadingContainer>
+      <div className="paginationContainer">
+        {posts.length >= itemsOnPage && (
+          <Pagination
+            count={numberOfPages}
+            page={currentPage}
+            onChange={(event, value) => setCurrentPage(value)}
+            color="primary"
+          />
+        )}
+      </div>
+    </>
   )
 };
 

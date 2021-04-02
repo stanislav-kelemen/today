@@ -14,6 +14,7 @@ const Home = () => {
   const { isAuthenticated } = useAuthenticationContext();
 
   useEffect(() => {
+
     const fetch = async () => {
       if (isAuthenticated) {
         try {
@@ -30,6 +31,7 @@ const Home = () => {
     };
 
     fetch();
+
   }, [isAuthenticated]);
   
   return (

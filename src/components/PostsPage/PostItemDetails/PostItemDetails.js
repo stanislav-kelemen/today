@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { POST_URL } from '../../../constants/endpoints';
 import { POSTS_URL } from '../../../constants/endpoints';
 
+import LoadingContainer from '../../../shared/LoadingContainer';
+
 import '../PostItem/PostItem.scss';
 
 const useStyles = makeStyles(() => ({
@@ -21,13 +23,16 @@ const PostItemDetails = () => {
   const { goBack } = useHistory();
   const classes = useStyles();
   const [postDetails, setPostDetails] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   
   useEffect(() => {
     const fetchPost = async (id) => {
+      setIsLoading(true);
       const response = await fetch(`${POST_URL}/${postId}`);
       const responseJSON = await response.json();
-      console.log(responseJSON)
+      
       setPostDetails(responseJSON);
+      setIsLoading(false);
     };
 
     fetchPost(postId);
@@ -56,29 +61,32 @@ const PostItemDetails = () => {
     deletePost(postId);
   }
 
-  return Object.values(postDetails).length && (
-    <Card className={`${classes.post} card`}>
-      <div className="wrapper">
-          <p className="post-title">
-            <Link to={`/post/${postId}`}>{postDetails.title}</Link>
-          </p>
-          <div className="item-buttons">
-            <LoaderButton
-              className="deletePostButton"
-              onClick={handleDelete}
-              variant="contained"
-              color="secondary"
-            >
-              Delete my post
-            </LoaderButton>
-          </div>
-      </div>
-      <p className="post-text">{postDetails.text}</p>
-      <div className="post-header">
-        <div className="user-id">Author: {postDetails.author}</div>
-        <div className="post-date">Date: {getDataFormat()}</div>
-      </div>
-    </Card>
+  return (
+    <LoadingContainer isLoading={isLoading}>
+      { Object.values(postDetails).length && (
+      <Card className={`${classes.post} card`}>
+        <div className="wrapper">
+            <p className="post-title">
+              <Link to={`/post/${postId}`}>{postDetails.title}</Link>
+            </p>
+            <div className="item-buttons">
+              <LoaderButton
+                className="deletePostButton"
+                onClick={handleDelete}
+                variant="contained"
+                color="secondary"
+              >
+                Delete my post
+              </LoaderButton>
+            </div>
+        </div>
+        <p className="post-text">{postDetails.text}</p>
+        <div className="post-header">
+          <div className="user-id">Author: {postDetails.author}</div>
+          <div className="post-date">Date: {getDataFormat()}</div>
+        </div>
+      </Card>)}
+    </LoadingContainer>
   );
 };
 

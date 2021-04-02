@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './Preloader.scss';
 
-import circle from '../../assets/img/preloader/circle.svg';
+import circle from './PreviewPreloader/circle.svg';
 
 const Preloader = (props) => {
   const { overlay, size } = props;

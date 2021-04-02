@@ -1,0 +1,13 @@
+@import '../../scss/variables.scss';
+
+.notFound {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  margin-top: 250px;
+
+  font-size: 1.8rem;
+  font-family: $font-secondary;
+
+  width: 100%;
+}

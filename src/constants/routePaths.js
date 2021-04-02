@@ -3,7 +3,9 @@ const ROUTES = {
   SIGNUP: '/signup',
   LOGIN: '/login',
   COMMENTS: '/comments',
-  MY_POSTS: '/my-posts'
+  POSTS: '/posts',
+  MY_POSTS: '/my-posts',
+  USERS: '/users',
 };
 
 export default ROUTES;

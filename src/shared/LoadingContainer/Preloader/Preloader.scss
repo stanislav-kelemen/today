@@ -1,4 +1,4 @@
-@import 'src/scss/main.scss';
+@import '../../../scss/variables.scss';
 
 .preloader {
   top: 50%;
@@ -8,7 +8,7 @@
   transform: translate(-50%, -50%);
 
   &-wrapper {
-    background-color: $pale-white-darker;
+    background-color: transparent;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -28,6 +28,6 @@
   right: 0;
   width: 100vw;
   height: 100vh;
-  background-color: $pale-white-darker;
+  background-color: $light-grey;
   outline: none;
 }

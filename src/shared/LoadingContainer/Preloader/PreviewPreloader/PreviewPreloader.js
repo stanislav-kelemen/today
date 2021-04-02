@@ -1,6 +1,6 @@
 import React from 'react';
 
-import roller from '../../../assets/img/previewPreloader/paint.gif';
+import roller from './circle.svg';
 
 import style from './PreviewPreloader.module.scss';
 

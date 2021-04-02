@@ -31,13 +31,17 @@ const PostItem = (props) => {
 
   const classes = useStyles();
   const [userSub, setUserSub] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const { isAuthenticated } = useAuthenticationContext();
+
 
   useEffect(() => {
     const getUserInfo = async () => {
       try {
         const userInfo = await Auth.currentAuthenticatedUser();
+        const accessTokenPayload = userInfo.signInUserSession.getAccessToken()?.payload;
 
+        setIsAdmin(accessTokenPayload['cognito:groups']?.includes('admin'));
         setUserSub(userInfo.attributes.sub);
       } catch(e) {}
     }
@@ -75,7 +79,7 @@ const PostItem = (props) => {
               <p className="post-title">
                 <Link to={`/post/${postId}`}>{title}</Link>
               </p>
-              {isAuthenticated && isDeleteAllowed &&
+              {isAuthenticated && (isDeleteAllowed || isAdmin) &&
               <div className="item-buttons">
                 <LoaderButton
                   className="deletePostButton"
@@ -85,8 +89,7 @@ const PostItem = (props) => {
                 >
                   Delete my post
                 </LoaderButton>
-              </div>
-              }
+              </div>}
           </div>
           <p className="post-text">{text}</p>
           <div className="post-header">

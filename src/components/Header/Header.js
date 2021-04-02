@@ -9,6 +9,7 @@ import { useAuthenticationContext } from '../../shared/Authentication';
 import styles from './Header.module.scss';
 
 const Header = () => {
+  const [isAdmin, setIsAdmin] = useState(false);
   const [email, setEmail] = useState('');
   const { isAuthenticated, setIsAuthenticated } = useAuthenticationContext();
 
@@ -18,10 +19,13 @@ const Header = () => {
         if (isAuthenticated) {
           const userInfo = await Auth.currentAuthenticatedUser();
 
+          const accessTokenPayload = userInfo.signInUserSession.getAccessToken()?.payload;
+
+          setIsAdmin(accessTokenPayload['cognito:groups']?.includes('admin'));
           setEmail(userInfo.attributes.email);
         }
       } catch (e) {
-        onError(e);
+        onError(e)
       }
     }
 
@@ -42,10 +46,20 @@ const Header = () => {
       <div className={styles.links}>
         {isAuthenticated ? (
           <>
-            <Link className={styles.link} to={ROUTES.MY_POSTS}>
+            <div className={styles.email}>{email}</div>
+            {isAdmin &&
+              <>
+                <Link className={styles.link} to={ROUTES.USERS}>
+                  <span>Manage users</span>
+                </Link>
+                <Link className={styles.link} to={ROUTES.POSTS}>
+                  <span>All posts</span>
+                </Link>
+              </>
+            }
+            <Link className = {styles.link} to={ROUTES.MY_POSTS}>
               <span>My Posts</span>
             </Link>
-            <div className={styles.email}>{email}</div>
             <Link className={styles.link} to={ROUTES.HOME} onClick={handleLogout}>
               <span>Log Out</span>
             </Link>

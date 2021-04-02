@@ -6,6 +6,8 @@ import Pagination from "@material-ui/lab/Pagination";
 import { POSTS_URL } from "../../constants/endpoints";
 import { useAuthenticationContext } from "../../shared/Authentication";
 
+import LoadingContainer from '../../shared/LoadingContainer';
+
 import PostItem from "./PostItem";
 import AddPost from "../AddPost";
 import "./PostsPage.scss";
@@ -28,6 +30,7 @@ const PostsPage = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [numberOfPages, setNumberOfPages] = React.useState(0);
+  const [isLoading, setIsLoading] = React.useState(false);
   const itemsOnPage = 4;
   const { isAuthenticated } = useAuthenticationContext();
 
@@ -41,6 +44,7 @@ const PostsPage = () => {
 
   React.useEffect(() => {
     const fetchPosts = async (url) => {
+      setIsLoading(true);
       const response = await fetch(
         `${url}?limit=${itemsOnPage}&page=${currentPage}`
       );
@@ -48,7 +52,9 @@ const PostsPage = () => {
 
       setNumberOfPages(Math.ceil(responseJSON.postsNum / itemsOnPage));
       setPosts(responseJSON.posts);
+      setIsLoading(false);
     };
+
     fetchPosts(POSTS_URL);
   }, [currentPage]);
 
@@ -83,52 +89,54 @@ const PostsPage = () => {
   };
 
   return (
-    <div className="container">
-      {posts.map(renderPostItem)}
-      <div>
-        {isAuthenticated && (
-          <Button
-            className="addPostButton"
-            onClick={openModal}
-            color="primary"
-            variant="contained"
-          >
-            Add Post
-          </Button>
-        )}
-
-        <div className="paginationContainer">
-          <Pagination
-            count={numberOfPages}
-            page={currentPage}
-            onChange={handleChange}
-            siblingCount={0}
-            boundaryCount={1}
-            color="primary"
-          />
-        </div>
-
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          style={customStyles}
-          contentLabel="Example Modal"
-          ariaHideApp={false}
-        >
-          <div className="modalHeader">
-            <Button onClick={closeModal} variant="contained" color="secondary">
-              close
+    <LoadingContainer isLoading={isLoading}>
+      <div className="container">
+        {posts.map(renderPostItem)}
+        <div>
+          {isAuthenticated && (
+            <Button
+              className="addPostButton"
+              onClick={openModal}
+              color="primary"
+              variant="contained"
+            >
+              Add Post
             </Button>
-          </div>
+          )}
 
-          <AddPost
-            posts={posts}
-            onPostAdd={onPostAdd}
-            closeModal={closeModal}
-          />
-        </Modal>
+          { posts.length >= itemsOnPage && <div className="paginationContainer">
+            <Pagination
+              count={numberOfPages}
+              page={currentPage}
+              onChange={handleChange}
+              siblingCount={0}
+              boundaryCount={1}
+              color="primary"
+            />
+          </div> }
+
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+            ariaHideApp={false}
+          >
+            <div className="modalHeader">
+              <Button onClick={closeModal} variant="contained" color="secondary">
+                close
+              </Button>
+            </div>
+
+            <AddPost
+              posts={posts}
+              onPostAdd={onPostAdd}
+              closeModal={closeModal}
+            />
+          </Modal>
+        </div>
       </div>
-    </div>
+    </LoadingContainer>
   );
 };
 

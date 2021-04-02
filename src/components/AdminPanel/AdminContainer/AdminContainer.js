@@ -8,6 +8,8 @@ import CustomModal from '../CustomModal';
 
 import attributesToUser from '../../../helpers/attributesToUser';
 
+import LoadingContainer from '../../../shared/LoadingContainer';
+
 import styles from './AdminContainer.module.scss';
 
 const getUsers = async () => {
@@ -33,13 +35,16 @@ const getUsers = async () => {
 const AdminContainer = ({ className }) => {
   const [users, setUsers] = useState([]);
   const [modalIsOpen,setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
   
   useEffect(() => {
     const fetchUsers = async () => {
+      setIsLoading(true);
       setUsers(await getUsers());
+      setIsLoading(false);
     };
 
     fetchUsers();
@@ -72,21 +77,23 @@ const AdminContainer = ({ className }) => {
     }
   };
   return (
-    <div className={`${styles.container} ${className}`}>
-      <Modal
-        ariaHideApp={false}
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <CustomModal removeModal={closeModal} onUserAdd={onAdd}/>
-      </Modal>
-      <UserList users={users} onUserDelete={deleteUser}/>
-      <Button variant="contained" color="primary" onClick={openModal}>
-        Add User
-      </Button>
-    </div>
+    <LoadingContainer isLoading={isLoading}>
+      <div className={`${styles.container} ${className}`}>
+        <Modal
+          ariaHideApp={false}
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Example Modal"
+        >
+          <CustomModal removeModal={closeModal} onUserAdd={onAdd}/>
+        </Modal>
+        <UserList users={users} onUserDelete={deleteUser}/>
+        <Button variant="contained" color="primary" onClick={openModal}>
+          Add User
+        </Button>
+      </div>
+    </LoadingContainer>
   );
 };
 

@@ -10,8 +10,11 @@ import Home from './components/Home';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Comments from './components/Comments';
+import PostPage from './components/PostsPage';
 import PostDetails from './components/PostsPage/PostItemDetails';
 import MyPosts from './components/MyPosts';
+import AdminContainer from './components/AdminPanel/AdminContainer';
+import NotFound from './components/NotFound';
 
 dotenv.config();
 
@@ -53,6 +56,15 @@ function App() {
         </Route>
         <Route exact path={ROUTES.MY_POSTS}>
           <MyPosts />
+        </Route>
+        <Route exact path={ROUTES.POSTS}>
+          <PostPage />
+        </Route>
+        <Route exact path={ROUTES.USERS}>
+          <AdminContainer />
+        </Route>
+        <Route path="*">
+          <NotFound />
         </Route>
       </Switch>
     </>
