@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
+import Pagination from '../Pagination';
 import Comment from './Comment/Comment';
 import Form from './Form/Form';
 
@@ -9,17 +9,21 @@ import { COMMENTS_URL } from '../../constants/endpoints';
 
 const Comments = () => {
     let [comments, setComments] = useState([]);
-
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const [numberOfPages, setNumberOfPages] = React.useState(0);
+    const itemsOnPage = 2;
+   
     useEffect(() => {
         const fetchComments = async (url) => {
-            const response = await fetch(url);
+            const response = await fetch(`${url}?limit=${itemsOnPage}&page=${currentPage}`);
             const responseJSON = await response.json();
 
-            setComments(responseJSON);
+            console.log(numberOfPages)
+            setNumberOfPages(responseJSON.commentsNum / responseJSON.comments.length);
+            setComments(responseJSON.comments);
         };
-
         fetchComments(COMMENTS_URL);
-    }, []);
+    }, [itemsOnPage, currentPage, numberOfPages]);
 
     const onCommentDelete = (commentId) => {
         const updatedComments = comments.filter(comment => comment.commentId !== commentId);
@@ -39,12 +43,17 @@ const Comments = () => {
     const renderCommentItem = (comment) => (
         <Comment key={comment.commentId} {...comment} onUpdate={onCommentUpdate} onDelete={onCommentDelete} commentId={comment.commentId} />
     );
-
+    console.log(numberOfPages);
     return comments.length && (
-        <div className={style.container}>
-            {comments.map(renderCommentItem)}
-            <Form comments={comments} userId={comments[0].userId} postId={comments[0].postId} onAdd={onCommentAdd} setComments={setComments} />
-        </div>
+    <div className={style.container}>
+        { comments.map(renderCommentItem)}
+        <Form comments={comments} userId={comments[0].userId} postId={comments[0].postId} onAdd={onCommentAdd} setComments={setComments} />
+        <Pagination
+          currentPage={currentPage}
+          numberOfPages={numberOfPages}
+          setCurrentPage={setCurrentPage}
+        />
+    </div>
     )
 }
 

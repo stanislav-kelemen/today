@@ -16,8 +16,8 @@ const useStyles = makeStyles(() => ({
     backgroundColor: '#f8f9fa',
     width: '100%',
     height: '95%',
-    border: '1px solid rgb(135, 135, 255)',
-    borderRadius: '20px',
+    // border: '1px solid rgb(199, 199, 199)',
+    borderRadius: '10px',
     background: '#f8f9fa'
   }
 }));
@@ -29,8 +29,10 @@ const PostItem = (props) => {
     title,
     userId,
     createdAt,
-    onDelete
+    onDelete,
+    author
   } = props;
+  console.log(`userId`, userId)
   const classes = useStyles();
   const [userSub, setUserSub] = useState('');
   const { isAuthenticated } = useAuthenticationContext();
@@ -51,8 +53,7 @@ const PostItem = (props) => {
     }
     deletePost(postId);
   }
-
-
+  
   const getDataFormat = () => {
     const postDate = new Date(createdAt);
     const postDay = postDate.getDay();
@@ -71,7 +72,7 @@ const PostItem = (props) => {
           <p className="post-title">{title}</p>
           <p className="post-text">{text}</p>
           <div className="post-header">
-            <div className="user-id">Author: {userId}</div>
+            <div className="user-id">Author: {author}</div>
             <div className="post-date">Date: {getDataFormat()}</div>
           </div>
         </Card>

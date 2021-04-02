@@ -1,4 +1,6 @@
-.comment {
+@import "src/scss/variables.scss";
+
+.comment{
     display: flex;
     flex-direction: column;
     border: 1px solid grey;
@@ -12,18 +14,17 @@
 .delete {
     cursor: pointer;
     align-self: flex-end;
-    width: 50px;
-    top: 2rem;
-    right: 2rem;
-
-    &:hover {
+    top: 20px;
+    right: 20px;
+    &:hover{
+        cursor: pointer;
         filter: brightness(80%);
     }
 }
 
-.update {
-    top: 2rem;
-    right: 4rem;
+.update{
+    top: 20px;
+    right: 40px;
 }
 
 .buttons {
@@ -47,5 +48,6 @@
 
 .text {
     margin: 10px 0;
-    font-size: 3rem;
+    font-size: 1.5rem;
+    font-family: $font-primary;
 }
