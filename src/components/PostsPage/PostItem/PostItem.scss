@@ -32,6 +32,11 @@
   font-size: 23px;
   color: $white;
   font-family: $font-primary;
+
+  a {
+    color: currentColor;
+    text-decoration: none;
+  }
 }
 
 .post-header {
