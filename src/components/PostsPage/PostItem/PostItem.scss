@@ -2,12 +2,15 @@
 
 .card {
   margin-bottom: 25px;
-}
-
-.singlePostContainer {
   width: 800px;
   height: 400px;
   margin: 50px;
+}
+
+.wrapper {
+  display: flex;
+  background-color: $violet;
+  align-items: center;
 }
 
 .singlePost {
@@ -23,11 +26,10 @@
 }
 
 .post-title {
-  border-bottom: 1px solid rgb(199, 199, 199);
+  width: 75%;
   padding: 15px;
   margin: 0;
   font-size: 23px;
-  background-color: $violet;
   color: $white;
   font-family: $font-primary;
 }
@@ -37,6 +39,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  padding-top: 10px;
   height: 40px;
 }
 
@@ -72,7 +75,7 @@
 .item-buttons {
   display: flex;
   justify-content: space-around;
-  margin-top: 20px;
+  width: 20%;
 }
 
 .deletePostButton {
