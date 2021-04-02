@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Rendering without crushing shold render 1`] = `
-<div>
-  <Preloader
-    overlay={null}
-  />
-</div>
-`;
