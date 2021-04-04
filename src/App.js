@@ -51,7 +51,7 @@ function App() {
         <Route exact path={ROUTES.SIGNUP}>
           <SignUp />
         </Route>
-        <Route exact path="/post/:postId">
+        <Route path="/post/:postId">
           <PostDetails />
         </Route>
         <Route exact path={ROUTES.MY_POSTS}>
